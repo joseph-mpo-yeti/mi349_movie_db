@@ -1,4 +1,4 @@
-import React, { u } from 'react';
+import React from 'react';
 import Navbar from './components/Navbar';
 import SearchResults from './components/SearchResults';
 import NotificationsSystem, {wyboTheme, dismissNotification} from 'reapop'

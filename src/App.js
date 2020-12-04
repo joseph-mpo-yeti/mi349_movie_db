@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { u } from 'react';
+import Navbar from './components/Navbar';
+import SearchResults from './components/SearchResults';
+import NotificationsSystem, {wyboTheme, dismissNotification} from 'reapop'
+import { connect } from 'react-redux';
 
-function App() {
+function App(props) {
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NotificationsSystem
+          notifications={props.notifications}
+          dismissNotification={(id) => dismissNotification(id)}
+          theme={wyboTheme}
+      />
+      <Navbar />
+      <SearchResults />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => { 
+  return {
+    notifications: state.notifications
+  }
+}
+
+export default connect(mapStateToProps)(App);

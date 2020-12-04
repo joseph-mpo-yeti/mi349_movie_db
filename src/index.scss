@@ -1,0 +1,43 @@
+// Override default variables before the import
+$body-bg: #000;
+
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
+
+body {
+    padding-top: 75px;
+
+    #search-results {
+        color: #90ceff;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        max-width: 90%;
+        margin: 0 auto;
+        padding-bottom: 36px;
+
+        .card {
+            cursor: pointer;
+            margin: 10px;
+            height: 16rem;
+            width: 11rem;
+            background-size: cover;
+            background-position: center;
+            border: none;
+            transition: all 200ms ease-in-out;
+            
+            &:hover {
+                transform: scale(1.1);
+                z-index: 2;
+            }
+        }
+
+        .jumbotron {
+            margin: 0 auto;
+            margin-top: 50px;
+            background-color: #171717;
+            max-width: 750px;
+        }
+    }
+}

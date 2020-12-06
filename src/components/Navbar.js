@@ -69,13 +69,17 @@ const Navbar = (props) => {
         setSettings(initSettings);
         localStorage.setItem("settings", JSON.stringify(settings));
         addNotification("Settings saved", "Your settings have been reset!", "success")
-        makeSearch(null, props.query, {page: props.currentPage});
+        if(props.query){
+            makeSearch(null, props.query, {page: props.currentPage});
+        }
     }
     
     const saveChanges = () => {
         localStorage.setItem("settings", JSON.stringify(settings));
         addNotification("Settings saved", "Your new settings have been saved!", "success")
-        makeSearch(null, props.query, {page: props.currentPage});
+        if(props.query){
+            makeSearch(null, props.query, {page: props.currentPage});
+        }
     }
 
     const handleSettingsChange = (e) => {

@@ -6,22 +6,48 @@ $body-bg: #000;
 @import '~bootstrap/scss/bootstrap.scss';
 
 body {
-    padding-top: 75px;
+
+    .notification-container--bottom-right {
+        position: fixed;
+    }
+
+    .modal-backdrop.show {
+        opacity: 0.9;
+    }
+
+   
+    .metadata-card {
+        border-radius: 5px;
+        height: 150px;
+        width: 100px;
+        float: left;
+        margin-right: 20px;
+        margin-bottom: 5px;
+        background-size: cover;
+        background-attachment: local;
+        background-position: center;
+    }
+
+    .pagination {
+        margin: 10px auto;
+        width: fit-content;
+    }
 
     #search-results {
         color: #90ceff;
         display: flex;
         flex-wrap: wrap;
-        align-content: center;
-        max-width: 90%;
-        margin: 0 auto;
+        width: 90%;
+        max-width: 850px;
+        margin: 75px auto;
+        margin-bottom: 0;
         padding-bottom: 36px;
 
         .card {
             cursor: pointer;
             margin: 10px;
-            height: 16rem;
-            width: 11rem;
+            height: 18rem;
+            width: 12rem;
             background-size: cover;
             background-position: center;
             border: none;
@@ -31,6 +57,23 @@ body {
                 transform: scale(1.1);
                 z-index: 2;
             }
+
+            .movie-icon {
+                height: 80px;
+                width: 80px;
+                position: absolute;
+                top: calc(8rem - 40px);
+                left: calc(6rem - 40px);
+            }
+
+            .movie-title {
+                color: #000000;
+                margin: 10px auto;
+                font-weight: 500;
+                font-size: 14px;
+                text-align: center !important;
+                max-width: 95%;
+            }
         }
 
         .jumbotron {
@@ -38,6 +81,35 @@ body {
             margin-top: 50px;
             background-color: #171717;
             max-width: 750px;
+        }
+    }
+}
+
+
+@media all and (max-width: 944px){
+    body {
+        #search-results {
+            justify-content: center;
+        }
+    }
+}
+
+@media all and (max-width: 710px){
+    body {
+        
+        #search-results { 
+            width: 100%; 
+            
+            .jumbotron {
+                margin-top: 20px;
+                max-width: 90%;
+            }
+
+            .card {
+                margin: 5px;
+                height: 15rem;
+                width: 10rem;
+            }
         }
     }
 }

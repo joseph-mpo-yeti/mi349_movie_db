@@ -2,36 +2,86 @@ import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import MovieCard from './MovieCard';
+import Pagination from "react-js-pagination";
+import { 
+    updateQueryAction, updateResultsAction, updateStatusAction,
+    updateCurrentPageAction, updateNumPagesAction
+} from '../actions/actions';
+import { search } from '../services/moviesService';
 
-const SearchResults = ({results}) => {
+const SearchResults = ({
+    results, numberOfPages, currentPage, totalResults, query,
+    updateCurrentPage, updateNumPages, updateStatus, updateResults
+}) => {
+    
+    const handlePageChange = async (pageNumber) => {
+        updateStatus(true);
+        
+        let res = await search(query, {page: pageNumber})
+        
+        updateResults(res);
+        updateCurrentPage(pageNumber);
+        updateStatus(false);
+    }
+
     return (
-        <div id="search-results">
+        <div>
+            <div id="search-results">
+                {
+                    results.length > 0 ? results.map((movie, index) => (
+                        <MovieCard
+                                key={movie.imdbID}
+                                Title={movie.Title}
+                                Poster={movie.Poster}
+                                Year={movie.Year}
+                                imdbID={movie.imdbID}
+                            />
+                    )) : (<Jumbotron>
+                                <h1>Movies</h1>
+                                <p>
+                                    Find movies and series by entering their title. You can also 
+                                    change the default settings to reorder the results.
+                                </p>
+                            </Jumbotron>)
+                } 
+           </div>
            {
-               results ? results.map(movie => (
-                   <MovieCard
-                        key={`${movie.Title}-${movie.Year}`}
-                        Title={movie.Title}
-                        Poster={movie.Poster}
-                        Year={movie.Year}
+               totalResults > 0 &&
+                <Pagination
+                        activePage={currentPage}
+                        itemsCountPerPage={10}
+                        totalItemsCount={totalResults}
+                        pageRangeDisplayed={5}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                        onChange={handlePageChange}
                     />
-               )) : (<Jumbotron>
-                        <h1>Hello, world!</h1>
-                        <p>
-                            This is a simple hero unit, a simple jumbotron-style component for calling
-                            extra attention to featured content or information.
-                        </p>
-                    </Jumbotron>)
-           } 
-
+           }
         </div>
     );
 }
 
-
-const mapStateToProps = (state) => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        results: state.root.results.Search
+        updateQuery: (query) => dispatch(updateQueryAction(query)),
+        updateResults: (results) => dispatch(updateResultsAction(results)),
+        updateStatus: (loading) => dispatch(updateStatusAction(loading)),
+        updateNumPages: (totalPages) => dispatch(updateNumPagesAction(totalPages)),
+        updateCurrentPage: (currentPage) => dispatch(updateCurrentPageAction(currentPage))
     }
 }
 
-export default connect(mapStateToProps)(SearchResults);
+
+const mapStateToProps = (state) => {
+    const countRes = parseInt(state.results.totalResults)
+    const countPages = Math.ceil(countRes/10);
+    return {
+        query: state.query,
+        totalResults: countRes,
+        totalPages: countPages,
+        currentPage: state.currentPage,
+        results: state.results.Search ? state.results.Search : []
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchResults);

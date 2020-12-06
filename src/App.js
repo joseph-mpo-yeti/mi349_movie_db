@@ -1,20 +1,15 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import SearchResults from './components/SearchResults';
-import NotificationsSystem, {wyboTheme, dismissNotification} from 'reapop'
 import { connect } from 'react-redux';
+import ReactNotification from 'react-notifications-component'
 
 function App(props) {
-
   return (
     <div className="App">
-      <NotificationsSystem
-          notifications={props.notifications}
-          dismissNotification={(id) => dismissNotification(id)}
-          theme={wyboTheme}
-      />
-      <Navbar />
-      <SearchResults />
+        <ReactNotification isMobile={true} />
+        <Navbar />
+        <SearchResults />
     </div>
   );
 }

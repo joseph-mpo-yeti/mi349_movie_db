@@ -1,12 +1,11 @@
 import { actionTypes } from "../actions/actionTypes";
-import {reducer as notificationsReducer} from 'reapop';
-import { combineReducers } from "redux";
 
 const initState = {
     loading: false,
     query: "",
-    results: {},
-    toasts: []
+    numberOfPages: 0,
+    currentPage: 0,
+    results: {}
 }
 
 const rootReducer = (state=initState, action) => {
@@ -36,20 +35,9 @@ const rootReducer = (state=initState, action) => {
                 ...state,
                 results: action.results
             };
-        case actionTypes.CREATE_TOAST:
-            return {
-                ...state,
-                toasts: [
-                    ...state.toasts,
-                    action.toast
-                ]
-            }
         default:
             return state;
     }
 }
 
-export default combineReducers({
-    root: rootReducer,
-    notifications: notificationsReducer()
-})
+export default rootReducer;

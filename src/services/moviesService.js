@@ -2,6 +2,20 @@ require('dotenv/config');
 
 const apiKey = process.env.REACT_APP_OMDB_API_KEY;
 
+export const orderBy = {
+    year: 'year',
+    title: 'title',
+}
+
+export const order = {
+    desc: 'desc',
+    asc: 'asc'
+}
+
+export const plot = {
+    short: 'short',
+    full: 'full'
+}
 /**
  * 
  * @param {String} query 
@@ -9,35 +23,50 @@ const apiKey = process.env.REACT_APP_OMDB_API_KEY;
  */
 export const search = async (query, params={}) => {
     if(query === "" || query === null){
-        return Promise.reject(new Error("Search box empty! :("))
+        return Promise.reject(new Error("Your must fill the search box!"))
     }
 
-    const url = new URL("https://www.omdbapi.com/");
-    url.searchParams.set('s', query);
+    let url = new URL("https://www.omdbapi.com/");
+    url.searchParams.set('s', query.trim());
     url.searchParams.set('apikey', apiKey);
+    url.searchParams.set('type', 'movie');
     for (const key in params) {
         url.searchParams.set(key, params[key]);
     }
-    const results = await fetch(url.toString());
-
-    return results.json()
+    let results = await fetch(url.toString());
+    results = await results.json();
+    results.Search = reorder(results.Search)
+    
+    return results
 }
 
-/**
- * 
- * @param {Number} id the movie's imdbID 
- */
-export const getMovieData = async (id) => {
-    if(id === "" || id === null){
-        return Promise.reject(new Error("Invalid id provided!"))
-    }
-    const url = new URL("https://www.omdbapi.com/");
-    url.searchParams.set('t', id);
+export const searchMovie = async (id) => {
+    let url = new URL("https://www.omdbapi.com/");
+    url.searchParams.set('i', id);
+    url.searchParams.set('plot', (JSON.parse(localStorage.getItem('settings'))).plot)
     url.searchParams.set('apikey', apiKey);
-    url.searchParams.set('plot', 'short');
-    
-    const results = await fetch(url.toString());
-    console.log(results);
+    url.searchParams.set('type', 'movie');
+  
+    let results = await fetch(url.toString());
+    results = await results.json();
 
-    return results.json()
+    return results
+}
+
+const reorder = (results) => {
+    const settings = JSON.parse(localStorage.getItem("settings"))
+    
+    if(settings.orderBy === orderBy.year){
+        if(settings.order === order.desc){
+            return results.sort((a, b)=>parseInt(b.Year)-parseInt(a.Year))
+        } else {
+            return results.sort((a, b)=>parseInt(a.Year)-parseInt(b.Year))
+        }
+    } else {
+        if(settings.order === order.desc){
+            return results.sort((a, b)=>b.Title-a.Title)
+        } else {
+            return results.sort((a, b)=>a.Title-b.Title)
+        }
+    }
 }

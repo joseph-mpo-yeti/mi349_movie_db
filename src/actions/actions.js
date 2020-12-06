@@ -21,13 +21,6 @@ export const updateStatusAction = (loading) => {
     }
 }
 
-export const updatePageAction = (currentPage) => {
-    return {
-        type: actionTypes.UPDATE_CURR_PAGE_NUMBER,
-        currentPage
-    }
-}
-
 export const updateQueryAction = (query) => {
     return {
         type: actionTypes.UPDATE_SEARCH_QUERY,
@@ -35,9 +28,16 @@ export const updateQueryAction = (query) => {
     }
 }
 
-export const createToastAction = (toast) => {
+export const updateCurrentPageAction = (currentPage) => {
     return {
-        type: actionTypes.CREATE_TOAST,
-        toast
+        type: actionTypes.UPDATE_CURR_PAGE_NUMBER,
+        currentPage
+    }
+}
+
+export const updateNumPagesAction = (num) => {
+    return {
+        type: actionTypes.UPDATE_TOTAL_PAGES_NUMBER,
+        totalPages: num
     }
 }

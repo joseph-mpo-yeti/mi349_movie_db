@@ -35,7 +35,10 @@ export const search = async (query, params={}) => {
     }
     let results = await fetch(url.toString());
     results = await results.json();
-    results.Search = reorder(results.Search)
+    
+    if(results.Response === "True"){
+        results.Search = reorder(results.Search || [])
+    }
     
     return results
 }

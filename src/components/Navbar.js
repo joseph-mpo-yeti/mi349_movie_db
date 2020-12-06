@@ -29,14 +29,14 @@ const Navbar = (props) => {
         localStorage.setItem("settings", JSON.stringify(initSettings));
     }
 
-    const makeSearch = async (e, query=props.query) => {
+    const makeSearch = async (e, query=props.query, params={}) => {
         if(e){
             e.preventDefault();
         }
         props.updateStatus(true);
         try {
-            const page = props.currentPage || 1
-            const results = await search(query, {page});
+            const page = params.page || 1
+            const results = await search(query, page);
             setTimeout(()=>{
                 if(results.Response === "False"){
                     addNotification(results.Error,`No movie found for "${query}"`, "danger");
@@ -69,13 +69,13 @@ const Navbar = (props) => {
         setSettings(initSettings);
         localStorage.setItem("settings", JSON.stringify(settings));
         addNotification("Settings saved", "Your settings have been reset!", "success")
-        makeSearch(null);
+        makeSearch(null, props.query);
     }
-
+    
     const saveChanges = () => {
         localStorage.setItem("settings", JSON.stringify(settings));
         addNotification("Settings saved", "Your new settings have been saved!", "success")
-        makeSearch(null);
+        makeSearch(null, props.query, {page: props.currentPage});
     }
 
     const handleSettingsChange = (e) => {

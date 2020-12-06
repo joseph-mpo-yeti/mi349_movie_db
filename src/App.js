@@ -3,12 +3,14 @@ import Navbar from './components/Navbar';
 import SearchResults from './components/SearchResults';
 import { connect } from 'react-redux';
 import ReactNotification from 'react-notifications-component'
+import Loaders from './components/Loaders';
 
-function App(props) {
+function App({loading}) {
   return (
     <div className="App">
-        <ReactNotification isMobile={true} />
+        <ReactNotification/>
         <Navbar />
+        <Loaders loading={loading} />
         <SearchResults />
     </div>
   );
@@ -16,7 +18,7 @@ function App(props) {
 
 const mapStateToProps = (state) => { 
   return {
-    notifications: state.notifications
+    loading: state.loading
   }
 }
 

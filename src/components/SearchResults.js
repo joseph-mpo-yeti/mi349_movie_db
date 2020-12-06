@@ -10,7 +10,7 @@ import {
 import { search } from '../services/moviesService';
 
 const SearchResults = ({
-    results, numberOfPages, currentPage, totalResults, query,
+    results, numberOfPages, currentPage, totalResults, query, loading,
     updateCurrentPage, updateNumPages, updateStatus, updateResults
 }) => {
     
@@ -19,16 +19,18 @@ const SearchResults = ({
         
         let res = await search(query, {page: pageNumber})
         
-        updateResults(res);
-        updateCurrentPage(pageNumber);
-        updateStatus(false);
+        setTimeout(()=>{
+            updateResults(res);
+            updateCurrentPage(pageNumber);
+            updateStatus(false);
+        }, 800);
     }
 
     return (
         <div>
             <div id="search-results">
                 {
-                    results.length > 0 ? results.map((movie, index) => (
+                    results.length > 0 ? !loading && results.map((movie, index) => (
                         <MovieCard
                                 key={movie.imdbID}
                                 Title={movie.Title}
@@ -36,7 +38,7 @@ const SearchResults = ({
                                 Year={movie.Year}
                                 imdbID={movie.imdbID}
                             />
-                    )) : (<Jumbotron>
+                    )) : !loading && (<Jumbotron>
                                 <h1>Movies</h1>
                                 <p>
                                     Find movies and series by entering their title. You can also 
@@ -46,7 +48,7 @@ const SearchResults = ({
                 } 
            </div>
            {
-               totalResults > 0 &&
+               !loading && totalResults > 0 &&
                 <Pagination
                         activePage={currentPage}
                         itemsCountPerPage={10}
@@ -78,6 +80,7 @@ const mapStateToProps = (state) => {
     return {
         query: state.query,
         totalResults: countRes,
+        loading: state.loading,
         totalPages: countPages,
         currentPage: state.currentPage,
         results: state.results.Search ? state.results.Search : []

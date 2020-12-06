@@ -44,13 +44,14 @@ const Navbar = (props) => {
                     props.updateResults(results);
                     props.updateCurrentPage(page);
                 }
-            })
+                props.updateStatus(false);
+            }, 1200)
         } catch(err){
             console.log(err);
             addNotification("Error", err.message, "danger")
+            props.updateStatus(false);
         }
         
-        props.updateStatus(false);
     }
 
     const handleChange = (e) => {
